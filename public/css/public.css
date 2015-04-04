@@ -68,21 +68,22 @@ nav {
 
 .pages {
   padding-left: 2em;
-  list-style: square; }
+  list-style: square;
+  font-weight: normal; }
 
 .selected {
   font-weight: bold; }
 
-.page {
+#page {
   float: left;
   height: 100%;
   padding-left: 2em;
   vertical-align: top;
   background: #EEE4B9; }
-  .page h2 {
+  #page h2 {
     color: #8D0D19;
     margin-top: 1em; }
-  .page h3 {
+  #page h3 {
     color: #8D0D19; }
 
 /*# sourceMappingURL=public.css.map */
