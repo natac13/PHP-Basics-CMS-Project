@@ -2,26 +2,31 @@
 <?php require_once("../includes/functions.php"); ?>
 <?php include("../includes/layouts/header.php"); ?>
 
-<?php
-    if (isset($_GET["subject"])) {
-        $selected_subject_id = $_GET["subject"];
-        $selected_page_id = null;
-    } elseif  (isset($_GET["page"])) {
-        $selected_subject_id = null;
-        $selected_page_id = $_GET["page"];
-    } else {
-        $selected_page_id = null;
-        $selected_subject_id = null;
-   }
-?>
+<?php find_selected_page(); ?>
 
 
 <div class="main">
     <nav>
-        <?php echo navigation ($selected_subject_id, $selected_page_id)  ?>
+        <?php echo navigation ($current_subject, $current_page)  ?>
+        <a href="new_subject.php">+ Add a subject</a>
     </nav>
     <div id="page">
-        <h2>Manage Content</h2>
+            <?php if ($current_subject) { ?>
+                <h2>Manage Subject</h2>
+
+                Menu Name: <?php echo $current_subject["menu_name"]; ?><br>
+
+            <?php } elseif ($current_page) { ?>
+                <h2>Manage Page</h2>
+
+                Menu Name: <?php echo $current_page["menu_name"]; ?>
+
+            <?php } else { ?>
+
+                Please select a subject or page.
+
+            <?php } ?>
+
 
     </div>
 </div>
