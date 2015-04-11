@@ -110,3 +110,11 @@ nav {
     color: $burgundy;
    }
 }
+
+.message {
+    border: 2px solid $burgundy;
+    color: $burgundy;
+    font-weight: bold ;
+    margin: 1em;
+    padding: 1em;
+}
