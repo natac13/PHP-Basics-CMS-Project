@@ -111,10 +111,24 @@ nav {
    }
 }
 
+.view-content {
+    margin: 1em;
+    padding: 1em;
+    border: 1em solid #999;
+}
+
 .message {
     border: 2px solid $burgundy;
     color: $burgundy;
     font-weight: bold ;
     margin: 1em;
+    padding: 1em;
+}
+
+// errors
+.error {
+    color: $burgundy;
+    border: 2px solid $burgundy;
+    margin: 1em 0;
     padding: 1em;
 }

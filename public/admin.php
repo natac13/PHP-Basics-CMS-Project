@@ -4,7 +4,7 @@
     <nav>
         &nbsp;
     </nav>
-    <div class="page">
+    <div id="page">
         <h2>Admin Menu</h2>
         <p>Welcome to the admin area.</p>
         <ul>

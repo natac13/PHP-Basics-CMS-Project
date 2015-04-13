@@ -1,5 +1,5 @@
  <footer>
-        Copyright 2015, Widget Corp
+        Copyright <?php echo date("Y") ?>, Widget Corp
     </footer>
 
 </body>

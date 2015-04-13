@@ -24,7 +24,9 @@
             $output .= "Please fix the following errors:";
             $output .= "<ul>";
             foreach ($errors as $key => $error) {
-                $output .= "<li>{$error}</li>";
+                $output .= "<li>";
+                $output .= htmlentities($error);
+                $output .= "</li>";
             }
             $output .= "</ul>";
             $output .= "</div>";
@@ -82,7 +84,7 @@
                 $output .= "<a href=\"manage_content.php?subject=";
                 $output .=  urldecode($subject["id"]);
                 $output .= "\">";
-                $output .=  $subject["menu_name"];
+                $output .=  htmlentities($subject["menu_name"]);
                 $output .= "</a>";
 
                 $page_set = find_pages_for_subject($subject["id"]);
@@ -96,7 +98,7 @@
                     $output .= "<a href=\"manage_content.php?page=";
                     $output .=  urldecode($page["id"]);
                     $output .= "\">";
-                    $output .=  $page["menu_name"] ;
+                    $output .=  htmlentities($page["menu_name"]);
                     $output .= "</a></li>";
                 }
                 mysqli_free_result($page_set);
