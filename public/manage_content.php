@@ -56,7 +56,7 @@
                 </div>
                 <br>
                 <br>
-                <a href="edit_page.php?page=<?php echo urlencode($current_subject["id"]); ?>">Edit Page</a>
+                <a href="edit_page.php?page=<?php echo urlencode($current_page["id"]); ?>">Edit Page</a>
 
             <?php } else { ?>
 
