@@ -34,12 +34,14 @@
         return $output;
     }
 
-    function find_all_subjects () {
+    function find_all_subjects ($public=true) {
         global $db_connection;
 
         $query = "SELECT * ";
         $query .= "FROM subjects ";
-        // $query .= "WHERE visible = 1 ";
+        if ($public) {
+            $query .= "WHERE visible = 1 ";
+        }
         $query .= "ORDER BY position ASC";
 
         $subject_set = mysqli_query($db_connection, $query);
@@ -47,7 +49,7 @@
         return $subject_set;
     }
 
-    function find_pages_for_subject ($subject_id) {
+    function find_pages_for_subject ($subject_id, $public=true) {
         global $db_connection;
 
         $safe_subject_id = mysqli_real_escape_string($db_connection, $subject_id);
@@ -55,8 +57,11 @@
 
         $query = "SELECT * ";
         $query .= "FROM pages ";
-        $query .= "WHERE visible = 1 ";
-        $query .= "AND subject_id = {$safe_subject_id} ";
+        $query .= "WHERE subject_id = {$safe_subject_id} ";
+        if ($public) {
+            $query .= "AND visible = 1 ";
+        }
+
         $query .= "ORDER BY position ASC";
 
         $page_set = mysqli_query($db_connection, $query);
@@ -72,7 +77,7 @@
     function navigation ($subject_array, $page_array) {
              $output = "<ul class=\"subjects\">";
 
-             $subject_set = find_all_subjects();
+             $subject_set = find_all_subjects(false);
              while($subject = mysqli_fetch_assoc($subject_set)) {
              // this php is for only an <li> tag to either have a class of selected or not
              // but I use the php to output everything including the normal <li> tag
@@ -87,7 +92,7 @@
                 $output .=  htmlentities($subject["menu_name"]);
                 $output .= "</a>";
 
-                $page_set = find_pages_for_subject($subject["id"]);
+                $page_set = find_pages_for_subject($subject["id"], false);
                 $output .= "<ul class=\"pages\">";
                  while($page = mysqli_fetch_assoc($page_set)) {
                     $output .=  "<li";
@@ -103,6 +108,54 @@
                 }
                 mysqli_free_result($page_set);
                 $output .= "</ul> </li>";
+
+            }
+             mysqli_free_result($subject_set);
+            $output .= "</ul>";
+            return $output;
+        }
+
+    function public_navigation ($subject_array, $page_array) {
+             $output = "<ul class=\"subjects\">";
+
+             $subject_set = find_all_subjects();
+             while($subject = mysqli_fetch_assoc($subject_set)) {
+             // this php is for only an <li> tag to either have a class of selected or not
+             // but I use the php to output everything including the normal <li> tag
+                 $output .= "<li";
+                 if ($subject_array && $subject["id"] == $subject_array["id"]) {
+                    $output .=  " class=\"selected\"";
+                    }
+                $output .=  ">" ;
+                $output .= "<a href=\"index.php?subject=";
+                $output .=  urldecode($subject["id"]);
+                $output .= "\">";
+                $output .=  htmlentities($subject["menu_name"]);
+                $output .= "</a>";
+
+
+                if ($subject_array["id"]  == $subject["id"] ||
+                    $page_array["subject_id"] == $subject["id"]) {
+                    $page_set = find_pages_for_subject($subject["id"]);
+                    $output .= "<ul class=\"pages\">";
+                     while($page = mysqli_fetch_assoc($page_set)) {
+                        $output .=  "<li";
+                        if ($page_array && $page["id"] == $page_array["id"]) {
+                            $output .=  " class=\"selected\"";
+                        }
+                        $output .=  ">" ;
+                        $output .= "<a href=\"index.php?page=";
+                        $output .=  urldecode($page["id"]);
+                        $output .= "\">";
+                        $output .=  htmlentities($page["menu_name"]);
+                        $output .= "</a></li>";
+                    }
+                    $output .= "</ul>";
+                    mysqli_free_result($page_set);
+                }
+
+
+                $output .= "</li>"; // end of subject <li>
 
             }
              mysqli_free_result($subject_set);

@@ -1,3 +1,9 @@
+<?php
+    if (!isset($layout_context)) {
+        $layout_context = "public";
+    }
+?>
+
 <!DOCTYPE html>
 
 
@@ -7,8 +13,12 @@
     <meta name="description" content="Widgets">
     <meta name="viewpoint" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/public.css" media="all" type="text/css">
-    <title>Widget Corp</title>
+    <title>Widget Corp <?php if ($layout_context == "admin") {
+            echo "Admin";
+        } ?></title>
 <body>
     <header>
-        <h1>Widget Corp</h1>
+        <h1>Widget Corp <?php if ($layout_context == "admin") {
+            echo "Admin";
+        } ?></h1>
     </header>
