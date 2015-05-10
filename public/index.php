@@ -4,7 +4,7 @@
 <?php $layout_context = "public"; ?>
 <?php include("../includes/layouts/header.php"); ?>
 
-<?php find_selected_page(); ?>
+<?php find_selected_page(true); ?>
 
 
 <div class="main">
@@ -12,20 +12,15 @@
         <?php echo public_navigation ($current_subject, $current_page)  ?>
     </nav>
     <div id="page">
-            <?php if ($current_subject) { ?>
-                <h2>Manage Subject</h2>
+            <?php if ($current_page) { ?>
 
-                Menu Name: <?php echo htmlentities($current_subject["menu_name"]); ?><br>
-
-            <?php } elseif ($current_page) { ?>
-
-                    <?php echo htmlentities($current_page["content"]); ?>
+                    <h2><?php echo htmlentities($current_page["menu_name"]); ?></h2>
+                    <?php echo nl2br(htmlentities($current_page["content"])); ?>
 
 
             <?php } else { ?>
 
-                Please select a subject or page.
-
+                <p>Welcome!</p>
             <?php } ?>
 
 
