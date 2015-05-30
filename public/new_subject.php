@@ -22,8 +22,10 @@
                 <select name="position">
                 <?php
                 //  so I find all the data from the database with my function
-                //  then get the number of rows to have a max value for the for loop
-                //  the for loop is going to make a bunch of option tags for the selection tag
+                //  then get the number of rows to have a max value for the for
+                //  loop
+                //  the for loop is going to make a bunch of option tags for the
+                //  selection tag
                     $subject_set = find_all_subjects(false);
                     $subject_count = mysqli_num_rows($subject_set);
                     for ($count=1; $count <= ($subject_count + 1); $count++) {

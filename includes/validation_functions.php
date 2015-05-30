@@ -1,5 +1,7 @@
 <?php
-
+// $errors: an assoc array that will hold the messages
+// The associavtive part shows up in the validate functions when it builds
+// the array.
 $errors = array();
 
     function fieldname_as_text($fieldname) {
@@ -8,30 +10,32 @@ $errors = array();
         return $fieldname;
     }
 
-// has to be set and is not an empty string exactally
-// the $vlaue being passed in need to be trim()
+// has to be set and is not an empty string exactly
+// the $value being passed in need to be trim()
 
-    function has_presence($value) {
-        $value = trim($value);
-        return isset($value) && $value !== "";
+    function has_presence($input_text) {
+        $input_text = trim($input_text);
+        return isset($input_text) && $input_text !== "";
     }
 
-    function validate_presences($array) {
+    function validate_presences($input_text) {
         global $errors;
-        foreach ($array as $field) {
-            $value = trim($_POST[$field]);
-            if (!has_presence($value)) {
+        foreach ($input_text as $field) {
+            // $value = trim($_POST[$field]);
+            if (!has_presence($_POST[$field])) {
                 $errors[$field] = fieldname_as_text($field) . " can't be blank";
             }
         }
     }
-// has to be equal to or less than a $man amount
-    function has_max_length($value, $max) {
-        return strlen($value) <= $max;
+
+    // has to be equal to or less than a $man amount
+
+    function has_max_length($input_text, $max) {
+         return strlen($input_text) <= $max;
     }
 
-     function validate_max_lengths($fields_with_max_length) {
-    // arug: is a assoc. array (dict, from python)
+    function validate_max_lengths($fields_with_max_length) {
+    // variable: is a assoc. array (dict, from python)
         global $errors;
         foreach($fields_with_max_length as $field => $max) {
             $value = trim($_POST[$field]);
