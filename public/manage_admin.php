@@ -8,10 +8,10 @@
 
 <?php $layout_context = "admin"; ?>
 <?php include("../includes/layouts/header.php"); ?>
-<div id="main">
-    <div id="navigation">
+<div class="main" id="main">
+    <nav>
         &nbsp;
-    </div>
+    </nav>
     <div id="page">
         <?php echo message(); ?>
         <h2>Manage Admins</h2>
@@ -36,6 +36,7 @@
         </table>
         <br>
         <a href="new_admin.php">Add New Admin</a>
+
     </div>
 </div>
 

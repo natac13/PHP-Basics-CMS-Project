@@ -32,6 +32,11 @@ header {
   header h1 {
     padding: 1em;
     margin: 0; }
+    header h1 a {
+      color: white;
+      text-decoration: none; }
+    header h1 a:hover {
+      color: white; }
 
 .main {
   height: 600px;

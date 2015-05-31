@@ -1,0 +1,20 @@
+This is just a note on learning about hashing and salting a password.
+Hashing a password is pretty easy to understand. There are programs that will
+accomplish this for me. ie MD5, SH1, SH2, Blowfish. The problem comes from a
+hacker having a 'rainbow' table which has a huge list of random words and
+possible passwords which they try through the hashing program to match the
+passwords they stole. This is where salting a password comes in. Salting adds
+something to the password like a string or even better something unique like
+the username or time or a pseudo-random string which is the best. To know salt
+is to know the random string....
+
+Salt will have to be stored in the database. Also good idea to hash the salt.
+
+Version of this:
+$salt = md5(uniqid(mt_rand(), true));
+
+the mt_rand(): will generate a random string.
+uniqid: gives it an unique id, with true to make it extra secure
+md5: hashes the whole thing so that it is encrypted and not in plain text as
+    as to when it gets stored in the database.
+

@@ -30,20 +30,20 @@ if (isset($_POST['submit'])) {
 
         $id = $admin["id"];
         $username = mysql_prep($_POST["username"]);
-        $hashed_password = mysql_prep($_POST["password"]);
+        $hashed_password = password_encrypt($_POST["password"]);
 
         $query = "UPDATE admins SET ";
         $query .= "username = '{$username}', ";
-        $query .= "hashed_password = {$hashed_password}, ";
+        $query .= "hashed_password = '{$hashed_password}' ";
         $query .= "WHERE id = {$id} ";
         $query .= "LIMIT 1";
         $result = mysqli_query($db_connection, $query);
 
         if ($result && mysqli_affected_rows($db_connection) == 1) {
             $_SESSION["message"] = "Admin updated.";
-            redirect_to("manage_admins.php");
+            redirect_to("manage_admin.php");
         } else {
-            $_SESSION["mesages"] = "Admin update failure.";
+            $_SESSION["message"] = "Admin update failure.";
         }
     }
 } else {
@@ -51,12 +51,12 @@ if (isset($_POST['submit'])) {
 }
 ?>
 
-<?php $layout_content = "admin"; ?>
+<?php $layout_context = "admin"; ?>
 <?php include("../includes/layouts/header.php"); ?>
-<div id="main">
-    <div id="navigation">
+<div class="main" id="main">
+    <nav>
         &nbsp;
-    </div>
+    </nav>
     <div id="page">
         <?php echo message(); ?>
         <?php echo form_errors($errors); ?>

@@ -43,7 +43,11 @@ header {
     h1{
         padding: 1em;
         margin: 0;
-
+        a {
+        color: white;
+        text-decoration: none;
+        }
+        a:hover {color: white; }
     }
 }
 

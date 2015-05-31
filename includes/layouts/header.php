@@ -18,7 +18,13 @@
         } ?></title>
 <body>
     <header>
-        <h1>Widget Corp <?php if ($layout_context == "admin") {
+        <h1><a href=<?php
+        if ($layout_context == "admin") {
+            echo "admin.php";
+        } else {
+            echo "index.php";
+        } ?>>Widget Corp <?php if ($layout_context == "admin") {
             echo "Admin";
-        } ?></h1>
+        } ?>
+        </a></h1>
     </header>

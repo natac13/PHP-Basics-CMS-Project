@@ -99,6 +99,25 @@
             return null;
         }
     }
+
+    function find_admin_by_username($username) {
+        global $db_connection;
+
+        $safe_username = mysqli_real_escape_string($db_connection, $username);
+
+        $query = "SELECT * ";
+        $query .= "FROM admins ";
+        $query .= "WHERE username = '{$safe_username}' ";
+        $query .= "LIMIT 1";
+        // The set is all date in this case just 1 entry
+        $admin_set = mysqli_query($db_connection, $query);
+        confirm_query($admin_set);
+        if($admin = mysqli_fetch_assoc($admin_set)) {
+            return $admin;
+        } else {
+            return null;
+        }
+    }
 // the nav function build up a string that it outputs at the end with
 // the return therefore all the html tag are strings appended to $output
 // and the php is just throughout the function
@@ -272,6 +291,65 @@
         } else{
             $current_page = null;
             $current_subject = null;
+        }
+    }
+
+    function password_encrypt($password) {
+        $hash_format = "$2y$10$"; // tell php to use blowfish with cost of 10
+        $salt_lenght = 22; // what blowfish expects to see everytime
+
+        $salt = generate_salt($salt_lenght);
+        $format_and_salt = $hash_format . $salt;
+        $hash = crypt($password, $format_and_salt);
+        return $hash;
+    }
+
+    function generate_salt($length) {
+        // Not 100% random or unique but good enough for salt.
+        // MD5 returns 32 characters
+        $unique_random_string = md5(uniqid(mt_rand(), true));
+
+        // Valid characters for a salt are [a-z A-Z 0-9 ./]
+        $base64_string = base64_encode($unique_random_string);
+        // base 64 return + instead of . so i have to fix this on next line
+
+        // But not '+' which is valid in base 64 encoding
+        $modified_base64_string = str_replace('+', '.', $base64_string);
+
+        // Truncate string to the correct length
+        $salt = substr($modified_base64_string, 0, $length);
+
+        return $salt;
+    }
+
+    function password_check ($password, $existing_hash) {
+        // existing hash contains format and salt at start
+        // able to use the entire existing hash since the function will only
+        // take the first 22 character of the second argument and prefix it
+        // to the hashed password. Therefore the first 22 character are the
+        // same on the hashed versions and off
+        // pulls the format_and_salt which is at beginning of the existing_hash
+        $hash = crypt($password, $existing_hash);
+        if ($hash === $existing_hash) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    function attempt_login ($username, $password) {
+        $admin = find_admin_by_username($username);
+
+        if ($admin) {
+            // found admin in database
+            if (password_check($password, $admin["hashed_password"])) {
+                // password matches
+                return $admin;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 ?>

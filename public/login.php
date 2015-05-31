@@ -8,38 +8,34 @@
 // I check to see if the submit button was pressed (meaning if has a value of
 // true in the $_POST variable). By checking isset() determines if there is to
 // be a mySQL query made
+$username = "";
 if (isset($_POST['submit'])) {
     // Process the form
 
     $required_fields = array('username', 'password');
     validate_presences($required_fields);
 
-    $fields_with_max_length = array("username" => 30);
-    validate_max_lengths($fields_with_max_length);
-
     // $errors is an assoc array that is made with validate functions to
     // display whatever is wrong during the process
     if (empty($errors)) {
         // No errors found therefore continue
 
-        $username = mysql_prep($_POST["username"]);
-        // this is my own function that will take care of the hashing and
-        // salting all in the background. Therefore pass it a plain text
-        // password and it will give back the salted hashed version.
-        $hashed_password = password_encrypt($_POST["password"]);
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        $found_admin = attempt_login($username, $password);
 
-        $query = "INSERT INTO admins (";
-        $query .= " username, hashed_password";
-        $query .= ") VALUES (";
-        $query .= " '{$username}', '{$hashed_password}'";
-        $query .= ")";
-        $result = mysqli_query($db_connection, $query);
-
-        if ($result) {
-            $_SESSION["message"] = "Admin Created";
-            redirect_to("manage_admin.php");
+        if ($found_admin) {
+            // $_SESSION["message"] = "Welcome to the admin pages";
+            // mark as logged in
+            $_SESSION["admin_id"] = $found_admin["id"];
+            $_SESSION["username"] = $found_admin["username"];
+            // can use user name in place like the header to greet them
+            // or just to remember them for a great UI experience! This is
+            // so I do not have to keep querying to get the username from
+            // the database.
+            redirect_to("admin.php");
         } else {
-            $_SESSION["message"] = "Admin creation failure.";
+            $_SESSION["message"] = "Username/password not found.";
         }
 
     }
@@ -50,7 +46,7 @@ if (isset($_POST['submit'])) {
 } // end: (isset($_POST['submit']))
 ?>
 
-<?php $layout_content = "admin"; ?>
+<?php $layout_context = "admin"; ?>
 <?php include("../includes/layouts/header.php"); ?>
 <div class="main" id="main">
     <nav>
@@ -59,15 +55,16 @@ if (isset($_POST['submit'])) {
     <div id="page">
         <?php echo message(); ?>
         <?php echo form_errors($errors); ?>
-        <h2>Create Admin</h2>
-        <form action="new_admin.php" method="post">
+        <h2>Login</h2>
+        <form action="login.php" method="post">
             <p>Username:
-                <input type="text" name="username" value=""/>
+                <input type="text" name="username" value="<?php echo
+                htmlentities($username); ?>"/>
             </p>
             <p>Password:
                 <input type="password" name="password" value="" placeholder="">
             </p>
-            <input type="submit" name="submit" value="Create Admin">
+            <input type="submit" name="submit" value="Submit">
         </form>
         <br>
         <a href="manage_admin.php">Cancel</a>
